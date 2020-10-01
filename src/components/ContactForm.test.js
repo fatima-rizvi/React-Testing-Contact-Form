@@ -12,18 +12,12 @@ describe('Tests Contact Form', () => {
         render(<ContactForm />)
 
         //Act - query each input and the submit button
-        // const firstNameInput = screen.getByLabelText(/firstName/i);
-        
         const firstNameInput = screen.getByLabelText(/first Name/i);
         //console.log(firstNameInput);
         const lastNameInput = screen.getByLabelText(/last Name/i);
         const emailInput = screen.getByLabelText(/email/i);
         const messageInput = screen.getByLabelText(/message/i);
         const submitButton = screen.getByRole("button", {name:/submit/i});
-
-        // //kubes
-        // const firstNameInput = screen.getByLabelText(/first name/i);
-        // const lastNameInput = screen.getByLabelText(/last name/i);
 
         //Fill out the inputs and click the button
         //first parameter, input field, second object is event parameter
@@ -34,13 +28,60 @@ describe('Tests Contact Form', () => {
         fireEvent.click(submitButton);
 
         //Assert-test that the filled out input rendered on the page after clicking  submit 
-        // const info = await screen.findByText(`{
+        // {
         //     "firstName": "Amy",
         //     "lastName": "John",
         //     "email": "amyjohn@gmail.com",
         //     "message": "Science buddy!!!"
-        //   }`)
-        screen.debug();
+        //   }
+        const renderFirstName = await screen.findByText( /"firstName": "Amy",/i)
+        const renderLastName = await screen.findByText( /"lastName": "John",/i)
+        const renderEmail = await screen.findByText( /"email": "amyjohn@gmail.com",/i)
+        const renderMessage = await screen.findByText( /"message": "Science buddy!!!"/i)
 
+        //screen.debug(); 
+
+    });
+    test('Required error for first name render', async () => {
+        //Arrange - render the form
+        render(<ContactForm />)
+
+        //Act - query the input
+        const firstNameInput = screen.getByLabelText(/first Name/i);
+        
+        //Click on and off the input element
+        fireEvent.click(firstNameInput);
+        fireEvent.blur(firstNameInput)
+
+        //Assert - check to see if the error message rendered
+        const firstNameReqError = await screen.findByText(/Looks like there was an error: Required/i)
+    });
+    test('Required error for last name render', async () => {
+        //Arrange - render the form
+        render(<ContactForm />)
+
+        //Act - query each the input
+        const lastNameInput = screen.getByLabelText(/last Name/i);
+        
+        //Click on and off the input element
+        fireEvent.click(lastNameInput);
+        fireEvent.blur(lastNameInput)
+
+        //Assert - check to see if the error message rendered
+        const lastNameReqError = await screen.findByText(/Looks like there was an error: Required/i)
+    });
+    test('Required error for email render', async () => {
+        //Arrange - render the form
+        render(<ContactForm />)
+
+        //Act - query the input
+        const emailInput = screen.getByLabelText(/email/i);
+        
+        //Click on and off the input element
+        fireEvent.click(emailInput);
+        fireEvent.blur(emailInput)
+
+        //Assert - check to see if the error message rendered
+        const emailReqError = await screen.findByText(/Looks like there was an error: Required/i)
     })
 });
